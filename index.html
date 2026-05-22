@@ -1,0 +1,316 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover"/>
+  <meta name="theme-color" content="#0a0a12"/>
+  <title>MonPix AI — Premium Image Tools</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com"/>
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:wght@300;400;500&display=swap" rel="stylesheet"/>
+  <link rel="stylesheet" href="style.css"/>
+  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js"></script>
+  <script>UPLOADCARE_PUBLIC_KEY = '527f0f1c182a3ad64fd4';</script>
+</head>
+<body>
+
+<div class="noise"></div>
+<div class="orb orb1"></div>
+<div class="orb orb2"></div>
+<div class="orb orb3"></div>
+
+<!-- NAVBAR -->
+<nav class="navbar" id="navbar">
+  <div class="nav-inner">
+    <a class="nav-logo" href="#">
+      <div class="logo-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
+          <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#lg1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+          <defs><linearGradient id="lg1" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+        </svg>
+      </div>
+      <span class="logo-text">Mon<span class="acc">Pix</span> <span class="tag">AI</span></span>
+    </a>
+    <div class="nav-links">
+      <a href="#upscaler" class="nav-link active">Upscaler</a>
+      <a href="#removebg" class="nav-link">Remove BG</a>
+      <a href="#history" class="nav-link">History</a>
+    </div>
+    <div class="nav-right">
+      <button class="theme-btn" id="themeToggle" title="Toggle theme">
+        <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      </button>
+      <button class="menu-btn" id="menuBtn">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+  </div>
+  <div class="mob-nav" id="mobNav">
+    <a href="#upscaler" class="mob-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Upscaler</a>
+    <a href="#removebg" class="mob-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M8 12h8M12 8v8"/></svg>Remove BG</a>
+    <a href="#history" class="mob-link">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>History</a>
+  </div>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-badge"><span class="bdot"></span>AI-Powered &middot; Free &middot; Instant</div>
+  <h1 class="hero-title">Transform Your<br/><span class="grad-text">Images with AI</span></h1>
+  <p class="hero-sub">Ultra-sharp upscaling up to 16&times; resolution. Crystal-clear background removal. Professional results in seconds.</p>
+  <div class="hero-cta">
+    <button class="btn-primary" onclick="document.getElementById('upscaler').scrollIntoView({behavior:'smooth'})">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Upscale Image</button>
+    <button class="btn-ghost" onclick="document.getElementById('removebg').scrollIntoView({behavior:'smooth'})">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Remove BG</button>
+  </div>
+  <div class="hero-stats">
+    <div class="stat"><span class="snum">16&times;</span><span class="slabel">Max Resolution</span></div>
+    <div class="sdiv"></div>
+    <div class="stat"><span class="snum">&infin;</span><span class="slabel">Free Usage</span></div>
+    <div class="sdiv"></div>
+    <div class="stat"><span class="snum">&lt;5s</span><span class="slabel">Processing</span></div>
+  </div>
+</section>
+
+<!-- MAIN -->
+<main class="main">
+
+  <!-- UPSCALER -->
+  <section class="tool-sec" id="upscaler">
+    <div class="sec-head">
+      <div class="sec-icon">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+      </div>
+      <div>
+        <h2 class="sec-title">AI Image Upscaler</h2>
+        <p class="sec-sub">Enhance resolution up to 16&times; with AI precision</p>
+      </div>
+    </div>
+    <div class="card">
+
+      <!-- Drop Zone -->
+      <div class="drop-zone" id="upDrop">
+        <input type="file" id="upFile" accept="image/*" hidden/>
+        <div class="drop-inner">
+          <div class="drop-ico">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+          </div>
+          <p class="drop-title">Drop image here</p>
+          <p class="drop-sub">PNG, JPG, WEBP up to 20MB</p>
+          <button class="file-btn" onclick="document.getElementById('upFile').click()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Choose File
+          </button>
+        </div>
+      </div>
+
+      <!-- URL Input -->
+      <div class="field-group">
+        <label class="field-label">Or paste image URL</label>
+        <div class="field-wrap">
+          <svg class="field-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <input type="url" class="field-input" id="upUrl" placeholder="https://example.com/image.jpg"/>
+        </div>
+      </div>
+
+      <!-- Slider -->
+      <div class="slider-group">
+        <div class="slider-top">
+          <label class="field-label">Resolution Scale</label>
+          <div class="res-badge" id="upResLabel">2&times;</div>
+        </div>
+        <input type="range" class="slider" id="upRes" min="1" max="16" value="2" step="1"/>
+        <div class="slider-ticks"><span>1&times;</span><span>4&times;</span><span>8&times;</span><span>12&times;</span><span>16&times;</span></div>
+      </div>
+
+      <!-- Buttons -->
+      <div class="btn-row">
+        <button class="btn-primary flex-1" id="upBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Upscale Image
+        </button>
+        <button class="btn-ico" id="upRetry" style="display:none" title="Retry">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </button>
+      </div>
+
+      <!-- Loading -->
+      <div class="loading" id="upLoading" style="display:none">
+        <div class="spin-ring"></div>
+        <div><p class="load-title">Processing with AI...</p><p class="load-sub">Enhancing image resolution</p></div>
+      </div>
+
+      <!-- Result -->
+      <div class="result" id="upResult" style="display:none">
+        <div class="result-head">
+          <span class="done-badge">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Done
+          </span>
+          <div class="res-btns">
+            <button class="btn-sm" id="upCopy"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy URL</button>
+            <button class="btn-sm" id="upDown"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download</button>
+            <button class="btn-sm" id="upFull"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>Fullscreen</button>
+          </div>
+        </div>
+        <!-- Before / After -->
+        <div class="ba-wrap" id="upBA">
+          <div class="ba-container" id="upBAC">
+            <img class="ba-before" id="upBefore" src="" alt="Original" loading="lazy"/>
+            <div class="ba-after-mask" id="upAfterMask">
+              <img class="ba-after" id="upAfter" src="" alt="Result" loading="lazy"/>
+            </div>
+            <div class="ba-line" id="upLine">
+              <div class="ba-handle">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </div>
+            <span class="ba-label ba-label-l">Original</span>
+            <span class="ba-label ba-label-r">Upscaled</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- REMOVE BG -->
+  <section class="tool-sec" id="removebg">
+    <div class="sec-head">
+      <div class="sec-icon sec-icon-cyan">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v8"/></svg>
+      </div>
+      <div>
+        <h2 class="sec-title">Remove Background</h2>
+        <p class="sec-sub">AI-powered precise background removal</p>
+      </div>
+    </div>
+    <div class="card">
+
+      <div class="drop-zone" id="bgDrop">
+        <input type="file" id="bgFile" accept="image/*" hidden/>
+        <div class="drop-inner">
+          <div class="drop-ico drop-ico-cyan">
+            <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M8 12h8M12 8v8"/></svg>
+          </div>
+          <p class="drop-title">Drop image here</p>
+          <p class="drop-sub">PNG, JPG, WEBP up to 20MB</p>
+          <button class="file-btn file-btn-cyan" onclick="document.getElementById('bgFile').click()">
+            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+            Choose File
+          </button>
+        </div>
+      </div>
+
+      <div class="field-group">
+        <label class="field-label">Or paste image URL</label>
+        <div class="field-wrap">
+          <svg class="field-ico" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10 13a5 5 0 0 0 7.54.54l3-3a5 5 0 0 0-7.07-7.07l-1.72 1.71"/><path d="M14 11a5 5 0 0 0-7.54-.54l-3 3a5 5 0 0 0 7.07 7.07l1.71-1.71"/></svg>
+          <input type="url" class="field-input" id="bgUrl" placeholder="https://example.com/image.jpg"/>
+        </div>
+      </div>
+
+      <div class="btn-row">
+        <button class="btn-cyan flex-1" id="bgBtn">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Remove Background
+        </button>
+        <button class="btn-ico btn-ico-cyan" id="bgRetry" style="display:none" title="Retry">
+          <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/></svg>
+        </button>
+      </div>
+
+      <div class="loading" id="bgLoading" style="display:none">
+        <div class="spin-ring spin-cyan"></div>
+        <div><p class="load-title">Removing background...</p><p class="load-sub">AI is analyzing your image</p></div>
+      </div>
+
+      <div class="result" id="bgResult" style="display:none">
+        <div class="result-head">
+          <span class="done-badge done-cyan">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>Done
+          </span>
+          <div class="res-btns">
+            <button class="btn-sm btn-sm-cyan" id="bgCopy"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy URL</button>
+            <button class="btn-sm btn-sm-cyan" id="bgDown"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>Download</button>
+            <button class="btn-sm btn-sm-cyan" id="bgFull"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>Fullscreen</button>
+          </div>
+        </div>
+        <div class="ba-wrap" id="bgBA">
+          <div class="ba-container" id="bgBAC">
+            <img class="ba-before" id="bgBefore" src="" alt="Original" loading="lazy"/>
+            <div class="ba-after-mask" id="bgAfterMask">
+              <img class="ba-after" id="bgAfter" src="" alt="Result" loading="lazy"/>
+            </div>
+            <div class="ba-line" id="bgLine">
+              <div class="ba-handle ba-handle-cyan">
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="15 18 9 12 15 6"/></svg>
+                <svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3"><polyline points="9 18 15 12 9 6"/></svg>
+              </div>
+            </div>
+            <span class="ba-label ba-label-l">Original</span>
+            <span class="ba-label ba-label-r">No BG</span>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- HISTORY -->
+  <section class="tool-sec" id="history">
+    <div class="sec-head">
+      <div class="sec-icon sec-icon-pink">
+        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+      </div>
+      <div>
+        <h2 class="sec-title">History</h2>
+        <p class="sec-sub">Your recent processed images</p>
+      </div>
+    </div>
+    <div class="history-toolbar">
+      <span class="hist-count" id="histCount">0 items</span>
+      <button class="btn-ghost btn-sm-ghost" id="clearHist">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
+        Clear All
+      </button>
+    </div>
+    <div class="hist-grid" id="histGrid">
+      <div class="hist-empty" id="histEmpty">
+        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+        <p>No history yet</p>
+        <span>Processed images will appear here</span>
+      </div>
+    </div>
+  </section>
+
+</main>
+
+<!-- FOOTER -->
+<footer class="footer">
+  <div class="footer-inner">
+    <div class="footer-logo">
+      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+        <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#fg)" stroke-width="2" stroke-linecap="round"/>
+        <defs><linearGradient id="fg" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+      </svg>
+      <span>MonPix AI</span>
+    </div>
+    <p class="footer-copy">&copy; 2025 MonPix AI. All rights reserved.</p>
+  </div>
+</footer>
+
+<!-- FULLSCREEN MODAL -->
+<div class="fs-modal" id="fsModal">
+  <button class="fs-close" id="fsClose">
+    <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+  </button>
+  <img class="fs-img" id="fsImg" src="" alt="Fullscreen"/>
+</div>
+
+<!-- TOAST -->
+<div class="toast-wrap" id="toastWrap"></div>
+
+<script src="script.js"></script>
+</body>
+</html>
