@@ -3,409 +3,335 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="MonPix — AI-powered image tools. Upscale images up to 16x and remove backgrounds instantly with cutting-edge AI." />
-  <meta name="keywords" content="AI image upscaler, remove background, image tools, MonPix, AI photo editor" />
-  <meta name="author" content="MonPix" />
-  <meta property="og:title" content="MonPix — AI Image Tools" />
-  <meta property="og:description" content="Upscale & remove backgrounds from images using AI — free, fast, and beautiful." />
-  <meta property="og:type" content="website" />
+  <meta name="description" content="MonPix — AI-powered image tools. Upscale images up to 16x and remove backgrounds instantly." />
   <meta name="theme-color" content="#0a0a0f" />
-
-  <title>MonPix — AI Image Tools</title>
-
-  <!-- Favicon SVG inline -->
+  <title>MonPix — AI Image Toolss</title>
   <link rel="icon" type="image/svg+xml" href="assets/favicon.svg" />
   <link rel="manifest" href="manifest.json" />
-  <link rel="apple-touch-icon" href="assets/icon-192.svg" />
-
-  <!-- Fonts -->
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet" />
-
-  <!-- Uploadcare Widget -->
-  <script src="https://ucarecdn.com/libs/widget/3.x/uploadcare.full.min.js" charset="utf-8"></script>
-  <script>UPLOADCARE_PUBLIC_KEY = '527f0f1c182a3ad64fd4';</script>
-
+  <link href="https://fonts.googleapis.com/css2?family=Syne:wght@700;800&family=DM+Sans:opsz,wght@9..40,400;9..40,500&display=swap" rel="stylesheet" />
   <link rel="stylesheet" href="style.css" />
 </head>
 <body>
 
-<!-- ===== NOISE OVERLAY ===== -->
 <div class="noise-overlay" aria-hidden="true"></div>
-
-<!-- ===== BACKGROUND ORBS ===== -->
 <div class="bg-orbs" aria-hidden="true">
   <div class="orb orb-1"></div>
   <div class="orb orb-2"></div>
   <div class="orb orb-3"></div>
 </div>
 
-<!-- ===== NAVBAR ===== -->
+<!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <div class="nav-inner">
-    <a href="#" class="nav-logo" aria-label="MonPix Home">
-      <svg width="28" height="28" viewBox="0 0 28 28" fill="none" xmlns="http://www.w3.org/2000/svg">
-        <rect width="28" height="28" rx="8" fill="url(#logoGrad)"/>
+    <a href="#" class="nav-logo">
+      <svg width="26" height="26" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="8" fill="url(#nlg)"/>
         <path d="M7 14L11.5 9.5L16 14L20.5 9.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
         <path d="M7 18.5L11.5 14L16 18.5L20.5 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
-        <defs>
-          <linearGradient id="logoGrad" x1="0" y1="0" x2="28" y2="28">
-            <stop offset="0%" stop-color="#7c3aed"/>
-            <stop offset="100%" stop-color="#06b6d4"/>
-          </linearGradient>
-        </defs>
+        <defs><linearGradient id="nlg" x1="0" y1="0" x2="28" y2="28"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
       </svg>
       <span class="logo-text">Mon<span class="logo-accent">Pix</span></span>
     </a>
-
-    <div class="nav-center">
+    <div class="nav-links">
       <a href="#upscaler" class="nav-link">Upscaler</a>
       <a href="#removebg" class="nav-link">Remove BG</a>
       <a href="#history" class="nav-link">History</a>
     </div>
-
     <div class="nav-right">
-      <div class="stat-pill" id="navStat">
-        <svg width="12" height="12" viewBox="0 0 12 12" fill="none"><circle cx="6" cy="6" r="4" fill="#22d3ee" opacity="0.3"/><circle cx="6" cy="6" r="2" fill="#22d3ee"/></svg>
+      <div class="stat-pill">
+        <svg width="8" height="8" viewBox="0 0 8 8"><circle cx="4" cy="4" r="4" fill="#22d3ee"/></svg>
         <span id="processedCount">0</span> processed
       </div>
-      <button class="theme-toggle" id="themeToggle" aria-label="Toggle dark/light mode">
-        <svg class="icon-sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        <svg class="icon-moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+      <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+        <svg class="icon-sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="icon-moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
     </div>
   </div>
 </nav>
 
-<!-- ===== HERO ===== -->
+<!-- HERO -->
 <section class="hero">
   <div class="hero-badge">
-    <svg width="14" height="14" viewBox="0 0 14 14" fill="none"><path d="M7 1L8.8 5.2L13.5 5.5L10 8.6L11.1 13.2L7 10.7L2.9 13.2L4 8.6L0.5 5.5L5.2 5.2L7 1Z" fill="#a78bfa"/></svg>
+    <svg width="12" height="12" viewBox="0 0 14 14" fill="#a78bfa"><path d="M7 1L8.8 5.2L13.5 5.5L10 8.6L11.1 13.2L7 10.7L2.9 13.2L4 8.6L0.5 5.5L5.2 5.2L7 1Z"/></svg>
     AI-Powered Image Tools
   </div>
-  <h1 class="hero-title">
-    Transform Images<br/>
-    <span class="gradient-text">with AI Precision</span>
-  </h1>
+  <h1 class="hero-title">Transform Images<br/><span class="gradient-text">with AI Precision</span></h1>
   <p class="hero-sub">Upscale up to 16× resolution. Remove backgrounds instantly.<br/>No signup required — just pure AI power.</p>
   <div class="hero-actions">
     <a href="#upscaler" class="btn btn-primary">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
       Start Upscaling
     </a>
     <a href="#removebg" class="btn btn-ghost">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Remove Background
     </a>
   </div>
 </section>
 
-<!-- ===== UPSCALER SECTION ===== -->
-<section class="tool-section" id="upscaler">
+<!-- UPSCALER -->
+<section class="tool-section reveal" id="upscaler">
   <div class="section-header">
     <div class="section-badge">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
       AI Upscaler
     </div>
     <h2 class="section-title">Image Upscaler</h2>
-    <p class="section-sub">Enhance image quality from 1× to 16× resolution using AI super-resolution technology.</p>
+    <p class="section-sub">Enhance image quality from 1× to 16× using AI super-resolution.</p>
   </div>
-
-  <div class="tool-card glass-card">
+  <div class="tool-card">
     <!-- Upload Zone -->
-    <div class="upload-zone" id="upscaleDropZone" role="button" tabindex="0" aria-label="Upload image for upscaling">
-      <div class="upload-inner" id="upscaleUploadInner">
-        <div class="upload-icon-wrap">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+    <div class="upload-zone" id="upscaleZone">
+      <div class="upload-idle" id="upscaleIdle">
+        <div class="upload-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
         </div>
         <p class="upload-title">Drop image here</p>
-        <p class="upload-sub">or click to browse — PNG, JPG, WEBP up to 10MB</p>
-        <button class="btn btn-outline btn-sm upload-btn" id="upscaleUploadBtn" type="button">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Choose File
-        </button>
-        <input type="hidden" role="uploadcare-uploader" id="upscaleUploadcare" name="upscaleFile" data-images-only="true" data-preview-step="false" />
+        <p class="upload-sub">PNG, JPG, WEBP up to 10MB</p>
+        <button class="btn btn-outline btn-sm" id="upscalePickBtn" type="button">Choose File</button>
+        <input type="file" id="upscaleFileInput" accept="image/*" style="display:none" />
       </div>
-      <div class="upload-preview hidden" id="upscalePreview">
-        <img id="upscalePreviewImg" src="" alt="Preview" loading="lazy" />
-        <button class="preview-remove" id="upscaleRemoveImg" aria-label="Remove image">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <div class="upload-preview hidden" id="upscalePreviewWrap">
+        <img id="upscalePreviewImg" src="" alt="Preview" />
+        <button class="remove-btn" id="upscaleRemove" aria-label="Remove">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
     </div>
 
     <!-- Resolution Slider -->
     <div class="control-group" id="upscaleControls">
-      <label class="control-label">
+      <div class="control-label">
         <span>Resolution Level</span>
-        <span class="control-value" id="resolutionValue">4×</span>
-      </label>
-      <div class="slider-track-wrap">
-        <input type="range" id="resolutionSlider" class="custom-slider" min="1" max="16" value="4" step="1" aria-label="Resolution multiplier" />
-        <div class="slider-marks">
-          <span>1×</span><span>4×</span><span>8×</span><span>12×</span><span>16×</span>
-        </div>
+        <span class="control-val" id="resVal">4×</span>
       </div>
-      <p class="control-hint">Higher levels produce sharper results but take longer to process.</p>
+      <input type="range" class="slider" id="resSlider" min="1" max="16" value="4" step="1" />
+      <div class="slider-marks"><span>1×</span><span>4×</span><span>8×</span><span>12×</span><span>16×</span></div>
+      <p class="control-hint">Higher = sharper but slower</p>
     </div>
 
-    <!-- Process Button -->
     <button class="btn btn-primary btn-full" id="upscaleBtn" disabled>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 3 21 3 21 9"/><polyline points="9 21 3 21 3 15"/><line x1="21" y1="3" x2="14" y2="10"/><line x1="3" y1="21" x2="10" y2="14"/></svg>
       Upscale Image
     </button>
 
-    <!-- Progress Bar -->
+    <!-- Progress -->
     <div class="progress-wrap hidden" id="upscaleProgress">
-      <div class="progress-header">
-        <span class="progress-label" id="upscaleProgressLabel">Processing...</span>
-        <span class="progress-pct" id="upscaleProgressPct">0%</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="upscaleProgressFill"></div>
-      </div>
+      <div class="progress-top"><span class="progress-label" id="upscaleLabel">Processing...</span><span class="progress-pct" id="upscalePct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="upscaleFill"></div></div>
     </div>
 
     <!-- Skeleton -->
-    <div class="skeleton-result hidden" id="upscaleSkeleton">
-      <div class="skeleton skeleton-img"></div>
-      <div class="skeleton skeleton-line" style="width:60%"></div>
-      <div class="skeleton skeleton-line" style="width:40%"></div>
+    <div class="skeleton-wrap hidden" id="upscaleSkeleton">
+      <div class="skel skel-img"></div>
+      <div class="skel skel-line" style="width:55%"></div>
+      <div class="skel skel-line" style="width:35%"></div>
     </div>
 
     <!-- Result -->
     <div class="result-wrap hidden" id="upscaleResult">
-      <div class="result-header">
+      <div class="result-top">
         <span class="result-badge">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           Upscaled
         </span>
         <div class="result-actions">
-          <button class="btn-icon" id="upscaleCopyUrl" aria-label="Copy URL">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <button class="icon-btn" id="upscaleCopy" title="Copy URL">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           </button>
-          <button class="btn-icon" id="upscaleFullscreen" aria-label="View fullscreen">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          <button class="icon-btn" id="upscaleFS" title="Fullscreen">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
           </button>
-          <button class="btn btn-sm btn-primary" id="upscaleDownload">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <button class="btn btn-primary btn-sm" id="upscaleDL">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download HD
           </button>
         </div>
       </div>
-      <!-- Before/After Slider -->
-      <div class="before-after-wrap" id="upscaleBAWrap">
-        <div class="before-after-slider" id="upscaleSlider">
-          <img class="ba-before" id="upscaleBeforeImg" src="" alt="Original" />
-          <div class="ba-after-wrap" id="upscaleAfterWrap">
-            <img class="ba-after" id="upscaleAfterImg" src="" alt="Upscaled" />
-          </div>
+      <div class="ba-wrap">
+        <div class="ba-slider" id="upscaleBA">
+          <img class="ba-before" id="upscaleBefore" src="" alt="Before" />
+          <div class="ba-clip" id="upscaleClip"><img class="ba-after" id="upscaleAfter" src="" alt="After" /></div>
           <div class="ba-handle" id="upscaleHandle">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <span class="ba-label ba-label-before">Before</span>
-          <span class="ba-label ba-label-after">After</span>
+          <span class="ba-tag ba-tag-l">Before</span>
+          <span class="ba-tag ba-tag-r">After</span>
         </div>
       </div>
-      <button class="btn btn-ghost btn-sm retry-btn" id="upscaleRetry">
+      <button class="btn btn-ghost btn-sm center-btn" id="upscaleAnother">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.36"/></svg>
-        Try Another
+        Try Another Image
       </button>
     </div>
 
-    <!-- Error State -->
-    <div class="error-state hidden" id="upscaleError">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <p class="error-msg" id="upscaleErrorMsg">Something went wrong. Please try again.</p>
-      <button class="btn btn-outline btn-sm" id="upscaleRetryBtn">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.36"/></svg>
-        Retry
-      </button>
+    <!-- Error -->
+    <div class="error-wrap hidden" id="upscaleError">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p id="upscaleErrMsg">Something went wrong.</p>
+      <button class="btn btn-outline btn-sm" id="upscaleRetry">Retry</button>
     </div>
   </div>
 </section>
 
-<!-- ===== REMOVE BG SECTION ===== -->
-<section class="tool-section" id="removebg">
+<!-- REMOVE BG -->
+<section class="tool-section reveal" id="removebg">
   <div class="section-header">
     <div class="section-badge">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Remove BG
     </div>
     <h2 class="section-title">Background Remover</h2>
-    <p class="section-sub">Remove any background from images instantly with one click using AI.</p>
+    <p class="section-sub">Remove any background instantly with one click using AI.</p>
   </div>
-
-  <div class="tool-card glass-card">
-    <div class="upload-zone" id="bgDropZone" role="button" tabindex="0" aria-label="Upload image for background removal">
-      <div class="upload-inner" id="bgUploadInner">
-        <div class="upload-icon-wrap">
-          <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+  <div class="tool-card">
+    <div class="upload-zone" id="bgZone">
+      <div class="upload-idle" id="bgIdle">
+        <div class="upload-icon">
+          <svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
         </div>
         <p class="upload-title">Drop image here</p>
-        <p class="upload-sub">or click to browse — PNG, JPG, WEBP up to 10MB</p>
-        <button class="btn btn-outline btn-sm upload-btn" id="bgUploadBtn" type="button">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
-          Choose File
-        </button>
-        <input type="hidden" role="uploadcare-uploader" id="bgUploadcare" name="bgFile" data-images-only="true" data-preview-step="false" />
+        <p class="upload-sub">PNG, JPG, WEBP up to 10MB</p>
+        <button class="btn btn-outline btn-sm" id="bgPickBtn" type="button">Choose File</button>
+        <input type="file" id="bgFileInput" accept="image/*" style="display:none" />
       </div>
-      <div class="upload-preview hidden" id="bgPreview">
-        <img id="bgPreviewImg" src="" alt="Preview" loading="lazy" />
-        <button class="preview-remove" id="bgRemoveImg" aria-label="Remove image">
-          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      <div class="upload-preview hidden" id="bgPreviewWrap">
+        <img id="bgPreviewImg" src="" alt="Preview" />
+        <button class="remove-btn" id="bgRemove" aria-label="Remove">
+          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
         </button>
       </div>
     </div>
 
     <button class="btn btn-primary btn-full" id="bgBtn" disabled>
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+      <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
       Remove Background
     </button>
 
     <div class="progress-wrap hidden" id="bgProgress">
-      <div class="progress-header">
-        <span class="progress-label" id="bgProgressLabel">Analyzing image...</span>
-        <span class="progress-pct" id="bgProgressPct">0%</span>
-      </div>
-      <div class="progress-bar">
-        <div class="progress-fill" id="bgProgressFill"></div>
-      </div>
+      <div class="progress-top"><span class="progress-label" id="bgLabel">Analyzing...</span><span class="progress-pct" id="bgPct">0%</span></div>
+      <div class="progress-bar"><div class="progress-fill" id="bgFill"></div></div>
     </div>
 
-    <div class="skeleton-result hidden" id="bgSkeleton">
-      <div class="skeleton skeleton-img"></div>
-      <div class="skeleton skeleton-line" style="width:60%"></div>
-      <div class="skeleton skeleton-line" style="width:40%"></div>
+    <div class="skeleton-wrap hidden" id="bgSkeleton">
+      <div class="skel skel-img"></div>
+      <div class="skel skel-line" style="width:55%"></div>
+      <div class="skel skel-line" style="width:35%"></div>
     </div>
 
     <div class="result-wrap hidden" id="bgResult">
-      <div class="result-header">
+      <div class="result-top">
         <span class="result-badge">
-          <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg>
+          <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>
           Background Removed
         </span>
         <div class="result-actions">
-          <button class="btn-icon" id="bgCopyUrl" aria-label="Copy URL">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2" ry="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
+          <button class="icon-btn" id="bgCopy" title="Copy URL">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>
           </button>
-          <button class="btn-icon" id="bgFullscreen" aria-label="View fullscreen">
-            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
+          <button class="icon-btn" id="bgFS" title="Fullscreen">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>
           </button>
-          <button class="btn btn-sm btn-primary" id="bgDownload">
-            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+          <button class="btn btn-primary btn-sm" id="bgDL">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
             Download PNG
           </button>
         </div>
       </div>
-      <div class="before-after-wrap" id="bgBAWrap">
-        <div class="before-after-slider" id="bgSlider">
-          <img class="ba-before" id="bgBeforeImg" src="" alt="Original" />
-          <div class="ba-after-wrap" id="bgAfterWrap">
-            <img class="ba-after" id="bgAfterImg" src="" alt="No Background" />
-          </div>
+      <div class="ba-wrap">
+        <div class="ba-slider" id="bgBA">
+          <img class="ba-before" id="bgBefore" src="" alt="Before" />
+          <div class="ba-clip" id="bgClip"><img class="ba-after" id="bgAfter" src="" alt="After" /></div>
           <div class="ba-handle" id="bgHandle">
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
-            <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="15 18 9 12 15 6"/></svg>
+            <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 18 15 12 9 6"/></svg>
           </div>
-          <span class="ba-label ba-label-before">Before</span>
-          <span class="ba-label ba-label-after">After</span>
+          <span class="ba-tag ba-tag-l">Before</span>
+          <span class="ba-tag ba-tag-r">After</span>
         </div>
       </div>
-      <button class="btn btn-ghost btn-sm retry-btn" id="bgRetry">
+      <button class="btn btn-ghost btn-sm center-btn" id="bgAnother">
         <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.36"/></svg>
-        Try Another
+        Try Another Image
       </button>
     </div>
 
-    <div class="error-state hidden" id="bgError">
-      <svg width="32" height="32" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
-      <p class="error-msg" id="bgErrorMsg">Something went wrong. Please try again.</p>
-      <button class="btn btn-outline btn-sm" id="bgRetryBtn">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="1 4 1 10 7 10"/><path d="M3.51 15a9 9 0 1 0 .49-3.36"/></svg>
-        Retry
-      </button>
+    <div class="error-wrap hidden" id="bgError">
+      <svg width="30" height="30" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>
+      <p id="bgErrMsg">Something went wrong.</p>
+      <button class="btn btn-outline btn-sm" id="bgRetry">Retry</button>
     </div>
   </div>
 </section>
 
-<!-- ===== HISTORY SECTION ===== -->
-<section class="tool-section" id="history">
+<!-- HISTORY -->
+<section class="tool-section reveal" id="history">
   <div class="section-header">
     <div class="section-badge">
-      <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       History
     </div>
     <h2 class="section-title">Edit History</h2>
     <p class="section-sub">Your recent processed images — stored locally in your browser.</p>
   </div>
-  <div class="history-toolbar">
-    <span class="history-count" id="historyCount">0 items</span>
-    <button class="btn btn-ghost btn-sm" id="clearHistory">
+  <div class="history-bar">
+    <span class="history-count" id="histCount">0 items</span>
+    <button class="btn btn-ghost btn-sm" id="clearHistBtn">
       <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a1 1 0 0 1 1-1h4a1 1 0 0 1 1 1v2"/></svg>
       Clear All
     </button>
   </div>
-  <div class="history-grid" id="historyGrid">
-    <div class="history-empty" id="historyEmpty">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+  <div class="history-grid" id="histGrid">
+    <div class="history-empty" id="histEmpty">
+      <svg width="36" height="36" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
       <p>No history yet</p>
-      <span>Process an image above to see it here</span>
+      <span>Process an image to see it here</span>
     </div>
   </div>
 </section>
 
-<!-- ===== FOOTER ===== -->
+<!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
-    <div class="footer-brand">
-      <a href="#" class="nav-logo" aria-label="MonPix">
-        <svg width="22" height="22" viewBox="0 0 28 28" fill="none"><rect width="28" height="28" rx="8" fill="url(#footerLogoGrad)"/><path d="M7 14L11.5 9.5L16 14L20.5 9.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/><path d="M7 18.5L11.5 14L16 18.5L20.5 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/><defs><linearGradient id="footerLogoGrad" x1="0" y1="0" x2="28" y2="28"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs></svg>
-        <span class="logo-text">Mon<span class="logo-accent">Pix</span></span>
-      </a>
-      <p>AI-powered image tools for everyone.</p>
-    </div>
+    <a href="#" class="nav-logo">
+      <svg width="22" height="22" viewBox="0 0 28 28" fill="none">
+        <rect width="28" height="28" rx="8" fill="url(#flg)"/>
+        <path d="M7 14L11.5 9.5L16 14L20.5 9.5" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
+        <path d="M7 18.5L11.5 14L16 18.5L20.5 14" stroke="white" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" opacity="0.6"/>
+        <defs><linearGradient id="flg" x1="0" y1="0" x2="28" y2="28"><stop offset="0%" stop-color="#7c3aed"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
+      </svg>
+      <span class="logo-text">Mon<span class="logo-accent">Pix</span></span>
+    </a>
+    <p class="footer-desc">AI-powered image tools for everyone. Free, fast, no signup.</p>
     <div class="footer-stats">
-      <div class="footer-stat">
-        <span class="footer-stat-num" id="footerCount">0</span>
-        <span class="footer-stat-label">Images Processed</span>
-      </div>
-      <div class="footer-stat">
-        <span class="footer-stat-num">16×</span>
-        <span class="footer-stat-label">Max Upscale</span>
-      </div>
-      <div class="footer-stat">
-        <span class="footer-stat-num">Free</span>
-        <span class="footer-stat-label">No Signup</span>
-      </div>
+      <div class="fstat"><span class="fstat-n" id="footerCount">0</span><span class="fstat-l">Images Processed</span></div>
+      <div class="fstat"><span class="fstat-n">16×</span><span class="fstat-l">Max Upscale</span></div>
+      <div class="fstat"><span class="fstat-n">Free</span><span class="fstat-l">No Signup</span></div>
     </div>
     <p class="footer-copy">© 2025 MonPix. Built for creators.</p>
   </div>
 </footer>
 
-<!-- ===== FULLSCREEN MODAL ===== -->
-<div class="modal-overlay hidden" id="modalOverlay" role="dialog" aria-modal="true" aria-label="Fullscreen image preview">
-  <div class="modal-content">
-    <button class="modal-close" id="modalClose" aria-label="Close modal">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+<!-- MODAL -->
+<div class="modal-overlay hidden" id="modal">
+  <div class="modal-box">
+    <button class="modal-close" id="modalClose">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
     </button>
     <img id="modalImg" src="" alt="Preview" />
-    <div class="modal-actions">
-      <button class="btn btn-primary btn-sm" id="modalDownload">
-        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
-        Download
-      </button>
-    </div>
+    <button class="btn btn-primary btn-sm" id="modalDL">
+      <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+      Download
+    </button>
   </div>
 </div>
 
-<!-- ===== TOAST CONTAINER ===== -->
-<div class="toast-container" id="toastContainer" aria-live="polite"></div>
-
-<!-- ===== PAGE TRANSITION ===== -->
-<div class="page-transition" id="pageTransition"></div>
+<!-- TOAST -->
+<div class="toast-wrap" id="toastWrap" aria-live="polite"></div>
 
 <script src="script.js"></script>
 </body>
