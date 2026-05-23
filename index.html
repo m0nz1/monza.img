@@ -22,7 +22,8 @@
 <!-- NAVBAR -->
 <nav class="navbar" id="navbar">
   <div class="nav-inner">
-    <a class="nav-logo" href="#">
+    <!-- Logo -->
+    <a class="nav-logo" href="#" onclick="showPage('home');return false;">
       <div class="logo-icon">
         <svg width="20" height="20" viewBox="0 0 24 24" fill="none">
           <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#lg1)" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"/>
@@ -31,68 +32,102 @@
       </div>
       <span class="logo-text">Mon<span class="acc">Pix</span> <span class="tag">AI</span></span>
     </a>
-    <div class="nav-links">
-      <a href="#upscaler" class="nav-link active">Upscaler</a>
-      <a href="#removebg" class="nav-link">Remove BG</a>
-      <a href="#history" class="nav-link">History</a>
+
+    <!-- Desktop Tab Pills -->
+    <div class="nav-tabs">
+      <button class="nav-tab active" data-page="home" onclick="showPage('home')">Home</button>
+      <button class="nav-tab" data-page="upscaler" onclick="showPage('upscaler')">Upscaler</button>
+      <button class="nav-tab" data-page="removebg" onclick="showPage('removebg')">Remove BG</button>
+      <button class="nav-tab" data-page="history" onclick="showPage('history')">History</button>
     </div>
+
+    <!-- Right side -->
     <div class="nav-right">
       <button class="theme-btn" id="themeToggle" title="Toggle theme">
-        <svg class="sun" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
-        <svg class="moon" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
+        <svg class="sun" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="5"/><line x1="12" y1="1" x2="12" y2="3"/><line x1="12" y1="21" x2="12" y2="23"/><line x1="4.22" y1="4.22" x2="5.64" y2="5.64"/><line x1="18.36" y1="18.36" x2="19.78" y2="19.78"/><line x1="1" y1="12" x2="3" y2="12"/><line x1="21" y1="12" x2="23" y2="12"/><line x1="4.22" y1="19.78" x2="5.64" y2="18.36"/><line x1="18.36" y1="5.64" x2="19.78" y2="4.22"/></svg>
+        <svg class="moon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg>
       </button>
       <button class="menu-btn" id="menuBtn">
         <span></span><span></span><span></span>
       </button>
     </div>
   </div>
+
+  <!-- Mobile Bottom Sheet Nav -->
   <div class="mob-nav" id="mobNav">
-    <a href="#upscaler" class="mob-link">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Upscaler</a>
-    <a href="#removebg" class="mob-link">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M8 12h8M12 8v8"/></svg>Remove BG</a>
-    <a href="#history" class="mob-link">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>History</a>
+    <button class="mob-tab active" data-page="home" onclick="showPage('home');closeMob()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 9l9-7 9 7v11a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2z"/><polyline points="9 22 9 12 15 12 15 22"/></svg>Home
+    </button>
+    <button class="mob-tab" data-page="upscaler" onclick="showPage('upscaler');closeMob()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Upscaler
+    </button>
+    <button class="mob-tab" data-page="removebg" onclick="showPage('removebg');closeMob()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M8 12h8M12 8v8"/></svg>Remove BG
+    </button>
+    <button class="mob-tab" data-page="history" onclick="showPage('history');closeMob()">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>History
+    </button>
   </div>
 </nav>
 
-<!-- HERO -->
-<section class="hero">
-  <div class="hero-badge"><span class="bdot"></span>AI-Powered &middot; Free &middot; Instant</div>
-  <h1 class="hero-title">Transform Your<br/><span class="grad-text">Images with AI</span></h1>
-  <p class="hero-sub">Ultra-sharp upscaling up to 16&times; resolution. Crystal-clear background removal. Professional results in seconds.</p>
-  <div class="hero-cta">
-    <button class="btn-primary" onclick="document.getElementById('upscaler').scrollIntoView({behavior:'smooth'})">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Upscale Image</button>
-    <button class="btn-ghost" onclick="document.getElementById('removebg').scrollIntoView({behavior:'smooth'})">
-      <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Remove BG</button>
-  </div>
-  <div class="hero-stats">
-    <div class="stat"><span class="snum">16&times;</span><span class="slabel">Max Resolution</span></div>
-    <div class="sdiv"></div>
-    <div class="stat"><span class="snum">&infin;</span><span class="slabel">Free Usage</span></div>
-    <div class="sdiv"></div>
-    <div class="stat"><span class="snum">&lt;5s</span><span class="slabel">Processing</span></div>
-  </div>
-</section>
+<!-- ===== PAGE: HOME ===== -->
+<div class="page active" id="page-home">
+  <section class="hero">
+    <div class="hero-badge"><span class="bdot"></span>AI-Powered &middot; Free &middot; Instant</div>
+    <h1 class="hero-title">Transform Your<br/><span class="grad-text">Images with AI</span></h1>
+    <p class="hero-sub">Ultra-sharp upscaling up to 16&times; resolution. Crystal-clear background removal. Professional results in seconds.</p>
+    <div class="hero-cta">
+      <button class="btn-primary" onclick="showPage('upscaler')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Upscale Image
+      </button>
+      <button class="btn-ghost" onclick="showPage('removebg')">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M15 9l-6 6M9 9l6 6"/></svg>Remove BG
+      </button>
+    </div>
+    <div class="hero-stats">
+      <div class="stat"><span class="snum">16&times;</span><span class="slabel">Max Resolution</span></div>
+      <div class="sdiv"></div>
+      <div class="stat"><span class="snum">&infin;</span><span class="slabel">Free Usage</span></div>
+      <div class="sdiv"></div>
+      <div class="stat"><span class="snum">&lt;5s</span><span class="slabel">Processing</span></div>
+    </div>
+  </section>
 
-<!-- MAIN -->
-<main class="main">
+  <!-- Feature Cards -->
+  <div class="home-cards">
+    <div class="home-card" onclick="showPage('upscaler')">
+      <div class="hc-icon">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+      </div>
+      <h3 class="hc-title">AI Upscaler</h3>
+      <p class="hc-desc">Enhance image resolution up to 16&times; using advanced AI. Perfect for prints, social media, and more.</p>
+      <span class="hc-cta">Try now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+    </div>
+    <div class="home-card home-card-cyan" onclick="showPage('removebg')">
+      <div class="hc-icon hc-icon-cyan">
+        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M8 12h8M12 8v8"/></svg>
+      </div>
+      <h3 class="hc-title">Remove Background</h3>
+      <p class="hc-desc">Remove backgrounds with pixel-perfect AI precision. Get transparent PNG in seconds.</p>
+      <span class="hc-cta hc-cta-cyan">Try now <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14M12 5l7 7-7 7"/></svg></span>
+    </div>
+  </div>
+</div>
 
-  <!-- UPSCALER -->
-  <section class="tool-sec" id="upscaler">
-    <div class="sec-head">
-      <div class="sec-icon">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
+<!-- ===== PAGE: UPSCALER ===== -->
+<div class="page" id="page-upscaler">
+  <div class="page-inner">
+    <div class="page-head">
+      <div class="ph-icon">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>
       </div>
       <div>
-        <h2 class="sec-title">AI Image Upscaler</h2>
-        <p class="sec-sub">Enhance resolution up to 16&times; with AI precision</p>
+        <h2 class="page-title">AI Image Upscaler</h2>
+        <p class="page-sub">Enhance resolution up to 16&times; with AI precision</p>
       </div>
     </div>
-    <div class="card">
 
-      <!-- Drop Zone -->
+    <div class="card">
       <div class="drop-zone" id="upDrop">
         <input type="file" id="upFile" accept="image/*" hidden/>
         <div class="drop-inner">
@@ -108,7 +143,6 @@
         </div>
       </div>
 
-      <!-- URL Input -->
       <div class="field-group">
         <label class="field-label">Or paste image URL</label>
         <div class="field-wrap">
@@ -117,7 +151,6 @@
         </div>
       </div>
 
-      <!-- Slider -->
       <div class="slider-group">
         <div class="slider-top">
           <label class="field-label">Resolution Scale</label>
@@ -127,7 +160,6 @@
         <div class="slider-ticks"><span>1&times;</span><span>4&times;</span><span>8&times;</span><span>12&times;</span><span>16&times;</span></div>
       </div>
 
-      <!-- Buttons -->
       <div class="btn-row">
         <button class="btn-primary flex-1" id="upBtn">
           <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M15 3h6v6M9 21H3v-6M21 3l-7 7M3 21l7-7"/></svg>Upscale Image
@@ -137,13 +169,11 @@
         </button>
       </div>
 
-      <!-- Loading -->
       <div class="loading" id="upLoading" style="display:none">
         <div class="spin-ring"></div>
         <div><p class="load-title">Processing with AI...</p><p class="load-sub">Enhancing image resolution</p></div>
       </div>
 
-      <!-- Result -->
       <div class="result" id="upResult" style="display:none">
         <div class="result-head">
           <span class="done-badge">
@@ -155,8 +185,7 @@
             <button class="btn-sm" id="upFull"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>Fullscreen</button>
           </div>
         </div>
-        <!-- Before / After -->
-        <div class="ba-wrap" id="upBA">
+        <div class="ba-wrap">
           <div class="ba-container" id="upBAC">
             <img class="ba-before" id="upBefore" src="" alt="Original" loading="lazy"/>
             <div class="ba-after-mask" id="upAfterMask">
@@ -174,22 +203,24 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- REMOVE BG -->
-  <section class="tool-sec" id="removebg">
-    <div class="sec-head">
-      <div class="sec-icon sec-icon-cyan">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v8"/></svg>
+<!-- ===== PAGE: REMOVE BG ===== -->
+<div class="page" id="page-removebg">
+  <div class="page-inner">
+    <div class="page-head">
+      <div class="ph-icon ph-icon-cyan">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="3"/><path d="M16 8l-4 4-4-4"/><path d="M12 12v8"/></svg>
       </div>
       <div>
-        <h2 class="sec-title">Remove Background</h2>
-        <p class="sec-sub">AI-powered precise background removal</p>
+        <h2 class="page-title">Remove Background</h2>
+        <p class="page-sub">AI-powered precise background removal</p>
       </div>
     </div>
-    <div class="card">
 
-      <div class="drop-zone" id="bgDrop">
+    <div class="card">
+      <div class="drop-zone drop-zone-cyan" id="bgDrop">
         <input type="file" id="bgFile" accept="image/*" hidden/>
         <div class="drop-inner">
           <div class="drop-ico drop-ico-cyan">
@@ -237,10 +268,10 @@
             <button class="btn-sm btn-sm-cyan" id="bgFull"><svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>Fullscreen</button>
           </div>
         </div>
-        <div class="ba-wrap" id="bgBA">
+        <div class="ba-wrap">
           <div class="ba-container" id="bgBAC">
             <img class="ba-before" id="bgBefore" src="" alt="Original" loading="lazy"/>
-            <div class="ba-after-mask" id="bgAfterMask">
+            <div class="ba-after-mask checker" id="bgAfterMask">
               <img class="ba-after" id="bgAfter" src="" alt="Result" loading="lazy"/>
             </div>
             <div class="ba-line" id="bgLine">
@@ -255,48 +286,47 @@
         </div>
       </div>
     </div>
-  </section>
+  </div>
+</div>
 
-  <!-- HISTORY -->
-  <section class="tool-sec" id="history">
-    <div class="sec-head">
-      <div class="sec-icon sec-icon-pink">
-        <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
+<!-- ===== PAGE: HISTORY ===== -->
+<div class="page" id="page-history">
+  <div class="page-inner">
+    <div class="page-head">
+      <div class="ph-icon ph-icon-pink">
+        <svg width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
       </div>
       <div>
-        <h2 class="sec-title">History</h2>
-        <p class="sec-sub">Your recent processed images</p>
+        <h2 class="page-title">History</h2>
+        <p class="page-sub">Your recent processed images</p>
       </div>
     </div>
-    <div class="history-toolbar">
+    <div class="hist-toolbar">
       <span class="hist-count" id="histCount">0 items</span>
       <button class="btn-ghost btn-sm-ghost" id="clearHist">
-        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6M14 11v6"/></svg>
-        Clear All
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>Clear All
       </button>
     </div>
     <div class="hist-grid" id="histGrid">
-      <div class="hist-empty" id="histEmpty">
+      <div class="hist-empty">
         <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
-        <p>No history yet</p>
-        <span>Processed images will appear here</span>
+        <p>No history yet</p><span>Processed images will appear here</span>
       </div>
     </div>
-  </section>
-
-</main>
+  </div>
+</div>
 
 <!-- FOOTER -->
 <footer class="footer">
   <div class="footer-inner">
     <div class="footer-logo">
-      <svg width="18" height="18" viewBox="0 0 24 24" fill="none">
+      <svg width="16" height="16" viewBox="0 0 24 24" fill="none">
         <path d="M12 2L2 7l10 5 10-5-10-5zM2 17l10 5 10-5M2 12l10 5 10-5" stroke="url(#fg)" stroke-width="2" stroke-linecap="round"/>
         <defs><linearGradient id="fg" x1="2" y1="2" x2="22" y2="22" gradientUnits="userSpaceOnUse"><stop offset="0%" stop-color="#a855f7"/><stop offset="100%" stop-color="#06b6d4"/></linearGradient></defs>
       </svg>
       <span>MonPix AI</span>
     </div>
-    <p class="footer-copy">&copy; 2025 MonPix AI. All rights reserved.</p>
+    <p class="footer-copy">&copy; 2025 MonPix AI</p>
   </div>
 </footer>
 

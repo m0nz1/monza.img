@@ -9,68 +9,70 @@ let bgInputUrl = '';
 let upscaleResultUrl = '';
 let bgResultUrl = '';
 
-// ====== DOM HELPERS ======
+// ====== DOM ======
 const $ = id => document.getElementById(id);
-const show = id => $(id).style.display = '';
-const hide = id => $(id).style.display = 'none';
+
+// ====== PAGE ROUTER ======
+function showPage(name) {
+  document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
+  const target = $('page-' + name);
+  if (target) target.classList.add('active');
+
+  // Update desktop tabs
+  document.querySelectorAll('.nav-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.page === name);
+  });
+  // Update mobile tabs
+  document.querySelectorAll('.mob-tab').forEach(t => {
+    t.classList.toggle('active', t.dataset.page === name);
+  });
+
+  // Re-render history when visiting that page
+  if (name === 'history') renderHistory();
+
+  window.scrollTo({ top: 0, behavior: 'smooth' });
+}
+
+function closeMob() {
+  $('mobNav').classList.remove('open');
+}
 
 // ====== THEME ======
-const themeToggle = $('themeToggle');
 let theme = localStorage.getItem('monpix-theme') || 'dark';
 document.documentElement.setAttribute('data-theme', theme);
 
-themeToggle.addEventListener('click', () => {
+$('themeToggle').addEventListener('click', () => {
   theme = theme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('monpix-theme', theme);
 });
 
-// ====== NAVBAR ======
+// ====== NAVBAR SCROLL ======
 window.addEventListener('scroll', () => {
-  $('navbar').classList.toggle('scrolled', window.scrollY > 20);
+  $('navbar').classList.toggle('scrolled', window.scrollY > 10);
 });
 
-// Mobile menu
+// ====== MOBILE MENU ======
 $('menuBtn').addEventListener('click', () => {
   $('mobNav').classList.toggle('open');
 });
 
-document.querySelectorAll('.mob-link').forEach(link => {
-  link.addEventListener('click', () => $('mobNav').classList.remove('open'));
-});
-
-// Nav active state
-const sections = ['upscaler', 'removebg', 'history'];
-window.addEventListener('scroll', () => {
-  let current = '';
-  sections.forEach(id => {
-    const el = $(id);
-    if (el && el.getBoundingClientRect().top <= 100) current = id;
-  });
-  document.querySelectorAll('.nav-link').forEach(l => {
-    l.classList.toggle('active', l.getAttribute('href') === '#' + current);
-  });
-});
-
 // ====== TOAST ======
-function toast(msg, type = 'info', dur = 3500) {
+function toast(msg, type = 'info', dur = 3200) {
   const wrap = $('toastWrap');
   const t = document.createElement('div');
   t.className = `toast ${type}`;
   const icons = {
-    success: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,
-    error: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
-    info: `<svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
+    success: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polyline points="20 6 9 17 4 12"/></svg>`,
+    error: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="15" y1="9" x2="9" y2="15"/><line x1="9" y1="9" x2="15" y2="15"/></svg>`,
+    info: `<svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/></svg>`
   };
   t.innerHTML = `${icons[type] || icons.info}<span>${msg}</span>`;
   wrap.appendChild(t);
-  setTimeout(() => {
-    t.classList.add('out');
-    setTimeout(() => t.remove(), 300);
-  }, dur);
+  setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, dur);
 }
 
-// ====== UPLOAD VIA UPLOADCARE ======
+// ====== UPLOADCARE ======
 async function uploadToUploadcare(file) {
   const form = new FormData();
   form.append('UPLOADCARE_PUB_KEY', UPLOADCARE_KEY);
@@ -82,7 +84,7 @@ async function uploadToUploadcare(file) {
   return `https://ucarecdn.com/${data.file}/`;
 }
 
-// ====== DRAG & DROP SETUP ======
+// ====== DRAG DROP ======
 function setupDrop(dropEl, fileInput, onUrl) {
   dropEl.addEventListener('click', e => {
     if (e.target.closest('.file-btn')) return;
@@ -103,20 +105,20 @@ function setupDrop(dropEl, fileInput, onUrl) {
 
 async function handleFileUpload(file, dropEl, onUrl) {
   const inner = dropEl.querySelector('.drop-inner');
-  const origHTML = inner.innerHTML;
-  inner.innerHTML = `<div class="drop-ico"><div class="spin-ring" style="width:32px;height:32px"></div></div><p class="drop-title">Uploading...</p><p class="drop-sub">${file.name}</p>`;
+  const orig = inner.innerHTML;
+  inner.innerHTML = `<div class="drop-ico"><div class="spin-ring" style="width:30px;height:30px"></div></div><p class="drop-title">Uploading...</p><p class="drop-sub">${file.name}</p>`;
   try {
     const url = await uploadToUploadcare(file);
     inner.innerHTML = `<div class="drop-ico" style="background:rgba(34,197,94,.1)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><p class="drop-title" style="color:#22c55e">Uploaded!</p><p class="drop-sub">${file.name}</p>`;
     onUrl(url);
     toast('Image uploaded!', 'success');
-  } catch (err) {
-    inner.innerHTML = origHTML;
-    toast('Upload failed. Try URL instead.', 'error');
+  } catch {
+    inner.innerHTML = orig;
+    toast('Upload failed. Try paste a URL instead.', 'error');
   }
 }
 
-// ====== BEFORE / AFTER SLIDER ======
+// ====== BEFORE / AFTER ======
 function initBA(containerId, maskId, lineId) {
   const c = $(containerId), mask = $(maskId), line = $(lineId);
   if (!c || !mask || !line) return;
@@ -130,8 +132,8 @@ function initBA(containerId, maskId, lineId) {
 
   function getX(e) {
     const rect = c.getBoundingClientRect();
-    const clientX = e.touches ? e.touches[0].clientX : e.clientX;
-    return ((clientX - rect.left) / rect.width) * 100;
+    const cx = e.touches ? e.touches[0].clientX : e.clientX;
+    return ((cx - rect.left) / rect.width) * 100;
   }
 
   c.addEventListener('mousedown', e => { dragging = true; setPos(getX(e)); });
@@ -144,24 +146,23 @@ function initBA(containerId, maskId, lineId) {
   setPos(50);
 }
 
-// ====== SLIDER UPDATE ======
+// ====== SLIDER ======
 const upRes = $('upRes');
 const upResLabel = $('upResLabel');
 
-function updateSlider(slider) {
+function syncSlider(slider) {
   const pct = ((slider.value - slider.min) / (slider.max - slider.min)) * 100;
-  slider.style.setProperty('--v', pct);
+  slider.style.setProperty('--pct', pct + '%');
 }
 
 upRes.addEventListener('input', () => {
   upResLabel.innerHTML = upRes.value + '&times;';
-  updateSlider(upRes);
+  syncSlider(upRes);
 });
-updateSlider(upRes);
+syncSlider(upRes);
 
 // ====== UPSCALER ======
 setupDrop($('upDrop'), $('upFile'), url => { upscaleInputUrl = url; $('upUrl').value = url; });
-
 $('upUrl').addEventListener('input', () => { upscaleInputUrl = $('upUrl').value.trim(); });
 
 async function runUpscale() {
@@ -169,36 +170,30 @@ async function runUpscale() {
   if (!url) { toast('Please upload or enter an image URL', 'error'); return; }
   const res = parseInt(upRes.value);
 
-  hide('upResult');
-  hide('upRetry');
-  show('upLoading');
+  $('upResult').style.display = 'none';
+  $('upRetry').style.display = 'none';
+  $('upLoading').style.display = 'flex';
   $('upBtn').disabled = true;
 
   try {
-    const apiUrl = `${UPSCALE_API}?url=${encodeURIComponent(url)}&resolusi=${res}`;
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error(`API error ${response.status}`);
-    const data = await response.json();
-
+    const r = await fetch(`${UPSCALE_API}?url=${encodeURIComponent(url)}&resolusi=${res}`);
+    if (!r.ok) throw new Error(`API error ${r.status}`);
+    const data = await r.json();
     const resultUrl = data.result || data.url || data.output || data.image;
-    if (!resultUrl) throw new Error('No result URL in response');
+    if (!resultUrl) throw new Error('No result URL returned');
 
     upscaleResultUrl = resultUrl;
     $('upBefore').src = url;
     $('upAfter').src = resultUrl;
-    $('upAfter').style.width = '100%';
-    $('upAfter').style.height = '100%';
-    $('upAfter').style.objectFit = 'cover';
 
-    hide('upLoading');
-    show('upResult');
+    $('upLoading').style.display = 'none';
+    $('upResult').style.display = 'flex';
     initBA('upBAC', 'upAfterMask', 'upLine');
     saveHistory('upscale', url, resultUrl, res + 'x');
-    toast(`Image upscaled ${res}×!`, 'success');
+    toast(`Upscaled ${res}× successfully!`, 'success');
   } catch (err) {
-    hide('upLoading');
-    show('upRetry');
-    $('upBtn').disabled = false;
+    $('upLoading').style.display = 'none';
+    $('upRetry').style.display = 'flex';
     toast('Upscale failed: ' + err.message, 'error');
   }
   $('upBtn').disabled = false;
@@ -206,57 +201,42 @@ async function runUpscale() {
 
 $('upBtn').addEventListener('click', runUpscale);
 $('upRetry').addEventListener('click', runUpscale);
-
-$('upCopy').addEventListener('click', () => {
-  navigator.clipboard.writeText(upscaleResultUrl).then(() => toast('URL copied!', 'success')).catch(() => toast('Copy failed', 'error'));
-});
-
+$('upCopy').addEventListener('click', () => navigator.clipboard.writeText(upscaleResultUrl).then(() => toast('URL copied!', 'success')).catch(() => toast('Failed to copy', 'error')));
 $('upDown').addEventListener('click', () => downloadImg(upscaleResultUrl, 'monpix-upscaled.png'));
-
 $('upFull').addEventListener('click', () => openFullscreen(upscaleResultUrl));
 
 // ====== REMOVE BG ======
 setupDrop($('bgDrop'), $('bgFile'), url => { bgInputUrl = url; $('bgUrl').value = url; });
-
 $('bgUrl').addEventListener('input', () => { bgInputUrl = $('bgUrl').value.trim(); });
 
 async function runRemoveBG() {
   const url = bgInputUrl || $('bgUrl').value.trim();
   if (!url) { toast('Please upload or enter an image URL', 'error'); return; }
 
-  hide('bgResult');
-  hide('bgRetry');
-  show('bgLoading');
+  $('bgResult').style.display = 'none';
+  $('bgRetry').style.display = 'none';
+  $('bgLoading').style.display = 'flex';
   $('bgBtn').disabled = true;
 
   try {
-    const apiUrl = `${REMOVEBG_API}?url=${encodeURIComponent(url)}`;
-    const response = await fetch(apiUrl);
-    if (!response.ok) throw new Error(`API error ${response.status}`);
-    const data = await response.json();
-
+    const r = await fetch(`${REMOVEBG_API}?url=${encodeURIComponent(url)}`);
+    if (!r.ok) throw new Error(`API error ${r.status}`);
+    const data = await r.json();
     const resultUrl = data.result || data.url || data.output || data.image;
-    if (!resultUrl) throw new Error('No result URL in response');
+    if (!resultUrl) throw new Error('No result URL returned');
 
     bgResultUrl = resultUrl;
     $('bgBefore').src = url;
     $('bgAfter').src = resultUrl;
-    $('bgAfter').style.width = '100%';
-    $('bgAfter').style.height = '100%';
-    $('bgAfter').style.objectFit = 'cover';
 
-    // Add checkerboard to show transparency
-    $('bgBAC').querySelector('.ba-after-mask').classList.add('checker');
-
-    hide('bgLoading');
-    show('bgResult');
+    $('bgLoading').style.display = 'none';
+    $('bgResult').style.display = 'flex';
     initBA('bgBAC', 'bgAfterMask', 'bgLine');
     saveHistory('removebg', url, resultUrl, '');
     toast('Background removed!', 'success');
   } catch (err) {
-    hide('bgLoading');
-    show('bgRetry');
-    $('bgBtn').disabled = false;
+    $('bgLoading').style.display = 'none';
+    $('bgRetry').style.display = 'flex';
     toast('Remove BG failed: ' + err.message, 'error');
   }
   $('bgBtn').disabled = false;
@@ -264,24 +244,15 @@ async function runRemoveBG() {
 
 $('bgBtn').addEventListener('click', runRemoveBG);
 $('bgRetry').addEventListener('click', runRemoveBG);
-
-$('bgCopy').addEventListener('click', () => {
-  navigator.clipboard.writeText(bgResultUrl).then(() => toast('URL copied!', 'success')).catch(() => toast('Copy failed', 'error'));
-});
-
+$('bgCopy').addEventListener('click', () => navigator.clipboard.writeText(bgResultUrl).then(() => toast('URL copied!', 'success')).catch(() => toast('Failed to copy', 'error')));
 $('bgDown').addEventListener('click', () => downloadImg(bgResultUrl, 'monpix-nobg.png'));
-
 $('bgFull').addEventListener('click', () => openFullscreen(bgResultUrl));
 
 // ====== DOWNLOAD ======
 function downloadImg(url, name) {
   const a = document.createElement('a');
-  a.href = url;
-  a.download = name;
-  a.target = '_blank';
-  document.body.appendChild(a);
-  a.click();
-  document.body.removeChild(a);
+  a.href = url; a.download = name; a.target = '_blank';
+  document.body.appendChild(a); a.click(); document.body.removeChild(a);
   toast('Download started!', 'success');
 }
 
@@ -291,18 +262,8 @@ function openFullscreen(url) {
   $('fsModal').classList.add('open');
   document.body.style.overflow = 'hidden';
 }
-
-$('fsClose').addEventListener('click', () => {
-  $('fsModal').classList.remove('open');
-  document.body.style.overflow = '';
-});
-
-$('fsModal').addEventListener('click', e => {
-  if (e.target === $('fsModal')) {
-    $('fsModal').classList.remove('open');
-    document.body.style.overflow = '';
-  }
-});
+$('fsClose').addEventListener('click', () => { $('fsModal').classList.remove('open'); document.body.style.overflow = ''; });
+$('fsModal').addEventListener('click', e => { if (e.target === $('fsModal')) { $('fsModal').classList.remove('open'); document.body.style.overflow = ''; } });
 
 // ====== HISTORY ======
 function saveHistory(type, inputUrl, resultUrl, meta) {
@@ -310,7 +271,6 @@ function saveHistory(type, inputUrl, resultUrl, meta) {
   hist.unshift({ type, inputUrl, resultUrl, meta, date: Date.now() });
   if (hist.length > 30) hist.pop();
   localStorage.setItem('monpix-history', JSON.stringify(hist));
-  renderHistory();
 }
 
 function renderHistory() {
@@ -319,28 +279,27 @@ function renderHistory() {
   $('histCount').textContent = hist.length + ' item' + (hist.length !== 1 ? 's' : '');
 
   if (hist.length === 0) {
-    grid.innerHTML = `<div class="hist-empty" id="histEmpty">
-      <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg>
-      <p>No history yet</p><span>Processed images will appear here</span></div>`;
+    grid.innerHTML = `<div class="hist-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><p>No history yet</p><span>Processed images will appear here</span></div>`;
     return;
   }
 
-  grid.innerHTML = hist.map((item, i) => {
-    const isCyan = item.type === 'removebg';
-    const typeLabel = item.type === 'upscale' ? (item.meta ? `Upscaled ${item.meta}` : 'Upscaled') : 'BG Removed';
+  grid.innerHTML = hist.map(item => {
+    const cyan = item.type === 'removebg';
+    const label = cyan ? 'BG Removed' : `Upscaled${item.meta ? ' ' + item.meta : ''}`;
     const d = new Date(item.date);
-    const dateStr = d.toLocaleDateString('en-US', { month:'short', day:'numeric', hour:'2-digit', minute:'2-digit' });
+    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
+    const safeUrl = item.resultUrl.replace(/'/g, "\\'");
     return `<div class="hist-card">
-      <img class="hist-thumb ${isCyan ? 'checker' : ''}" src="${item.resultUrl}" alt="Result" loading="lazy"/>
+      <img class="hist-thumb${cyan ? ' checker' : ''}" src="${item.resultUrl}" alt="Result" loading="lazy"/>
       <div class="hist-info">
-        <div class="hist-type ${isCyan ? 'cyan' : ''}">${typeLabel}</div>
+        <div class="hist-type${cyan ? ' cyan' : ''}">${label}</div>
         <div class="hist-date">${dateStr}</div>
       </div>
       <div class="hist-actions">
-        <button class="hist-btn ${isCyan ? 'cyan' : ''}" onclick="navigator.clipboard.writeText('${item.resultUrl}').then(()=>toast('Copied!','success'))">
+        <button class="hist-btn${cyan ? ' cyan' : ''}" onclick="navigator.clipboard.writeText('${safeUrl}').then(()=>toast('Copied!','success'))">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
         </button>
-        <button class="hist-btn ${isCyan ? 'cyan' : ''}" onclick="openFullscreen('${item.resultUrl}')">
+        <button class="hist-btn${cyan ? ' cyan' : ''}" onclick="openFullscreen('${safeUrl}')">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M8 3H5a2 2 0 0 0-2 2v3m18 0V5a2 2 0 0 0-2-2h-3m0 18h3a2 2 0 0 0 2-2v-3M3 16v3a2 2 0 0 0 2 2h3"/></svg>View
         </button>
       </div>
@@ -357,4 +316,4 @@ $('clearHist').addEventListener('click', () => {
 });
 
 // ====== INIT ======
-renderHistory();
+showPage('home');
