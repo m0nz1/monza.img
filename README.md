@@ -3,7 +3,7 @@
 Premium AI Image Tools — Upscaler & Background Remover
 
 ## Features
-- **AI Upscaler** — 1× to 16× resolution enhancement
+- **Ai Upscaler** — 1× to 16× resolution enhancement
 - **Remove Background** — AI-powered precise removal
 - **Before/After Slider** — Interactive comparison
 - **Drag & Drop Upload** — via Uploadcare CDN
