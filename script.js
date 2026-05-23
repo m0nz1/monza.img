@@ -78,13 +78,29 @@ async function safeFetch(url) {
 // ====== UPLOADCARE ======
 async function uploadToUploadcare(file) {
   const form = new FormData();
-  form.append('UPLOADCARE_PUB_KEY', UPLOADCARE_KEY);
-  form.append('UPLOADCARE_STORE', '1');
-  form.append('file', file);
-  const res = await fetch('https://upload.uploadcare.com/base/', { method: 'POST', body: form });
-  if (!res.ok) throw new Error('Uploadcare gagal: ' + res.status);
+  form.append("UPLOADCARE_PUB_KEY", UPLOADCARE_KEY);
+  form.append("UPLOADCARE_STORE", "auto");
+  form.append("file", file);
+
+  const res = await fetch("https://upload.uploadcare.com/base/", { method: "POST", body: form });
+  if (!res.ok) throw new Error("Upload gagal: HTTP " + res.status);
+
   const data = await res.json();
-  return `https://ucarecdn.com/${data.file}/`;
+  console.log("[Uploadcare]", data);
+
+  if (!data.file) throw new Error("Upload gagal, tidak ada file ID. Coba lagi.");
+
+  const fileUrl = "https://ucarecdn.com/" + data.file + "/";
+
+  // Verify CDN accessible
+  await new Promise((resolve, reject) => {
+    const img = new Image();
+    img.onload = resolve;
+    img.onerror = () => reject(new Error("File terupload tapi CDN belum siap, coba lagi sebentar."));
+    img.src = fileUrl;
+  });
+
+  return fileUrl;
 }
 
 // ====== DRAG DROP ======
@@ -364,4 +380,3 @@ $('clearHist').addEventListener('click', () => {
 
 // ====== INIT ======
 showPage('home');
-    
