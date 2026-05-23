@@ -364,3 +364,4 @@ $('clearHist').addEventListener('click', () => {
 
 // ====== INIT ======
 showPage('home');
+    
