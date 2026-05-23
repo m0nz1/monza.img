@@ -1,0 +1,24 @@
+<!DOCTYPE html>
+<html>
+<head><title>API Test</title></head>
+<body>
+<h3>API Test</h3>
+<p id="out">Testing...</p>
+<script>
+const url = 'https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=400';
+const apiUrl = `https://bintangapi.full.diskon.cloud/api/tools/upscale-img?url=${encodeURIComponent(url)}&resolusi=2`;
+
+fetch(apiUrl)
+  .then(r => {
+    document.getElementById('out').innerHTML = `Status: ${r.status}<br>OK: ${r.ok}`;
+    return r.json();
+  })
+  .then(d => {
+    document.getElementById('out').innerHTML += `<br>Data: ${JSON.stringify(d)}`;
+  })
+  .catch(e => {
+    document.getElementById('out').innerHTML = `<b style="color:red">Error: ${e.message}</b><br>Tipe: ${e.name}<br><br>Kemungkinan CORS. Buka console browser untuk detail.`;
+  });
+</script>
+</body>
+</html>
