@@ -15,7 +15,7 @@ Premium AI Image Tools — Upscaler & Background Remover
 - **Retry Button** — on failure
 
 ## Usage
-Open `index.html` in an browser. No build step required.
+Open `index.html` in an brower. No build step required.
 
 ## APIs
 - Upscaler: `https://bintangapi.full.diskon.cloud/api/tools/upscale-img`
