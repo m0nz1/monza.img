@@ -17,19 +17,9 @@ function showPage(name) {
   document.querySelectorAll('.page').forEach(p => p.classList.remove('active'));
   const target = $('page-' + name);
   if (target) target.classList.add('active');
-
-  // Update desktop tabs
-  document.querySelectorAll('.nav-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.page === name);
-  });
-  // Update mobile tabs
-  document.querySelectorAll('.mob-tab').forEach(t => {
-    t.classList.toggle('active', t.dataset.page === name);
-  });
-
-  // Re-render history when visiting that page
+  document.querySelectorAll('.nav-tab').forEach(t => t.classList.toggle('active', t.dataset.page === name));
+  document.querySelectorAll('.mob-tab').forEach(t => t.classList.toggle('active', t.dataset.page === name));
   if (name === 'history') renderHistory();
-
   window.scrollTo({ top: 0, behavior: 'smooth' });
 }
 
@@ -40,25 +30,20 @@ function closeMob() {
 // ====== THEME ======
 let theme = localStorage.getItem('monpix-theme') || 'dark';
 document.documentElement.setAttribute('data-theme', theme);
-
 $('themeToggle').addEventListener('click', () => {
   theme = theme === 'dark' ? 'light' : 'dark';
   document.documentElement.setAttribute('data-theme', theme);
   localStorage.setItem('monpix-theme', theme);
 });
 
-// ====== NAVBAR SCROLL ======
+// ====== NAVBAR ======
 window.addEventListener('scroll', () => {
   $('navbar').classList.toggle('scrolled', window.scrollY > 10);
 });
-
-// ====== MOBILE MENU ======
-$('menuBtn').addEventListener('click', () => {
-  $('mobNav').classList.toggle('open');
-});
+$('menuBtn').addEventListener('click', () => $('mobNav').classList.toggle('open'));
 
 // ====== TOAST ======
-function toast(msg, type = 'info', dur = 3200) {
+function toast(msg, type = 'info', dur = 4000) {
   const wrap = $('toastWrap');
   const t = document.createElement('div');
   t.className = `toast ${type}`;
@@ -72,6 +57,24 @@ function toast(msg, type = 'info', dur = 3200) {
   setTimeout(() => { t.classList.add('out'); setTimeout(() => t.remove(), 300); }, dur);
 }
 
+// ====== SAFE FETCH (dengan error CORS yang jelas) ======
+async function safeFetch(url) {
+  try {
+    const r = await fetch(url);
+    if (!r.ok) {
+      let errText = '';
+      try { errText = await r.text(); } catch {}
+      throw new Error(`Server error ${r.status}${errText ? ': ' + errText.slice(0, 80) : ''}`);
+    }
+    return r;
+  } catch (e) {
+    if (e.name === 'TypeError' && e.message.toLowerCase().includes('fetch')) {
+      throw new Error('Failed to connect ke API. Kemungkinan CORS — buka file ini pakai Live Server / http-server, bukan buka langsung dari folder.');
+    }
+    throw e;
+  }
+}
+
 // ====== UPLOADCARE ======
 async function uploadToUploadcare(file) {
   const form = new FormData();
@@ -79,17 +82,14 @@ async function uploadToUploadcare(file) {
   form.append('UPLOADCARE_STORE', '1');
   form.append('file', file);
   const res = await fetch('https://upload.uploadcare.com/base/', { method: 'POST', body: form });
-  if (!res.ok) throw new Error('Upload failed');
+  if (!res.ok) throw new Error('Uploadcare gagal: ' + res.status);
   const data = await res.json();
   return `https://ucarecdn.com/${data.file}/`;
 }
 
 // ====== DRAG DROP ======
 function setupDrop(dropEl, fileInput, onUrl) {
-  dropEl.addEventListener('click', e => {
-    if (e.target.closest('.file-btn')) return;
-    fileInput.click();
-  });
+  dropEl.addEventListener('click', e => { if (!e.target.closest('.file-btn')) fileInput.click(); });
   dropEl.addEventListener('dragover', e => { e.preventDefault(); dropEl.classList.add('drag-over'); });
   dropEl.addEventListener('dragleave', () => dropEl.classList.remove('drag-over'));
   dropEl.addEventListener('drop', async e => {
@@ -111,10 +111,10 @@ async function handleFileUpload(file, dropEl, onUrl) {
     const url = await uploadToUploadcare(file);
     inner.innerHTML = `<div class="drop-ico" style="background:rgba(34,197,94,.1)"><svg width="28" height="28" viewBox="0 0 24 24" fill="none" stroke="#22c55e" stroke-width="2"><polyline points="20 6 9 17 4 12"/></svg></div><p class="drop-title" style="color:#22c55e">Uploaded!</p><p class="drop-sub">${file.name}</p>`;
     onUrl(url);
-    toast('Image uploaded!', 'success');
-  } catch {
+    toast('Gambar berhasil diupload!', 'success');
+  } catch (err) {
     inner.innerHTML = orig;
-    toast('Upload failed. Try paste a URL instead.', 'error');
+    toast('Upload gagal: ' + err.message, 'error');
   }
 }
 
@@ -142,7 +142,6 @@ function initBA(containerId, maskId, lineId) {
   window.addEventListener('touchmove', e => { if (dragging) setPos(getX(e)); }, { passive: true });
   window.addEventListener('mouseup', () => dragging = false);
   window.addEventListener('touchend', () => dragging = false);
-
   setPos(50);
 }
 
@@ -161,13 +160,22 @@ upRes.addEventListener('input', () => {
 });
 syncSlider(upRes);
 
+// ====== HELPER: parse result URL ======
+// API langsung return gambar (bukan JSON), jadi URL-nya langsung dipakai
+function buildUpscaleUrl(imageUrl, resolusi) {
+  return `${UPSCALE_API}?url=${encodeURIComponent(imageUrl)}&resolusi=${resolusi}`;
+}
+function buildRemoveBGUrl(imageUrl) {
+  return `${REMOVEBG_API}?url=${encodeURIComponent(imageUrl)}`;
+}
+
 // ====== UPSCALER ======
 setupDrop($('upDrop'), $('upFile'), url => { upscaleInputUrl = url; $('upUrl').value = url; });
 $('upUrl').addEventListener('input', () => { upscaleInputUrl = $('upUrl').value.trim(); });
 
 async function runUpscale() {
-  const url = upscaleInputUrl || $('upUrl').value.trim();
-  if (!url) { toast('Please upload or enter an image URL', 'error'); return; }
+  const url = (upscaleInputUrl || $('upUrl').value).trim();
+  if (!url) { toast('Upload gambar atau masukkan URL dulu', 'error'); return; }
   const res = parseInt(upRes.value);
 
   $('upResult').style.display = 'none';
@@ -176,32 +184,53 @@ async function runUpscale() {
   $('upBtn').disabled = true;
 
   try {
-    const r = await fetch(`${UPSCALE_API}?url=${encodeURIComponent(url)}&resolusi=${res}`);
-    if (!r.ok) throw new Error(`API error ${r.status}`);
-    const data = await r.json();
-    const resultUrl = data.result || data.url || data.output || data.image;
-    if (!resultUrl) throw new Error('No result URL returned');
+    const resultUrl = buildUpscaleUrl(url, res);
+
+    // Step 1: validasi input
+    $('upLoading').querySelector('.load-sub').textContent = 'Memvalidasi gambar input...';
+    await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = resolve;
+      img.onerror = () => reject(new Error('URL gambar input tidak valid atau tidak bisa diakses.'));
+      img.src = url;
+    });
+
+    // Step 2: proses AI
+    $('upLoading').querySelector('.load-title').textContent = 'AI sedang memproses...';
+    $('upLoading').querySelector('.load-sub').textContent = `Upscaling ${res}× — ini bisa 5–30 detik`;
+    await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = resolve;
+      img.onerror = () => reject(new Error('API gagal memproses gambar. Coba lagi.'));
+      img.src = resultUrl;
+    });
 
     upscaleResultUrl = resultUrl;
     $('upBefore').src = url;
     $('upAfter').src = resultUrl;
 
     $('upLoading').style.display = 'none';
+    // Reset teks loading untuk next kali
+    $('upLoading').querySelector('.load-title').textContent = 'Processing with AI...';
+    $('upLoading').querySelector('.load-sub').textContent = 'Enhancing image resolution';
     $('upResult').style.display = 'flex';
     initBA('upBAC', 'upAfterMask', 'upLine');
     saveHistory('upscale', url, resultUrl, res + 'x');
-    toast(`Upscaled ${res}× successfully!`, 'success');
+    toast(`Upscale ${res}× berhasil!`, 'success');
   } catch (err) {
     $('upLoading').style.display = 'none';
+    $('upLoading').querySelector('.load-title').textContent = 'Processing with AI...';
+    $('upLoading').querySelector('.load-sub').textContent = 'Enhancing image resolution';
     $('upRetry').style.display = 'flex';
-    toast('Upscale failed: ' + err.message, 'error');
+    console.error('[MonPix Upscale Error]', err);
+    toast(err.message, 'error', 7000);
   }
   $('upBtn').disabled = false;
 }
 
 $('upBtn').addEventListener('click', runUpscale);
 $('upRetry').addEventListener('click', runUpscale);
-$('upCopy').addEventListener('click', () => navigator.clipboard.writeText(upscaleResultUrl).then(() => toast('URL copied!', 'success')).catch(() => toast('Failed to copy', 'error')));
+$('upCopy').addEventListener('click', () => navigator.clipboard.writeText(upscaleResultUrl).then(() => toast('URL disalin!', 'success')).catch(() => toast('Gagal copy', 'error')));
 $('upDown').addEventListener('click', () => downloadImg(upscaleResultUrl, 'monpix-upscaled.png'));
 $('upFull').addEventListener('click', () => openFullscreen(upscaleResultUrl));
 
@@ -210,8 +239,8 @@ setupDrop($('bgDrop'), $('bgFile'), url => { bgInputUrl = url; $('bgUrl').value 
 $('bgUrl').addEventListener('input', () => { bgInputUrl = $('bgUrl').value.trim(); });
 
 async function runRemoveBG() {
-  const url = bgInputUrl || $('bgUrl').value.trim();
-  if (!url) { toast('Please upload or enter an image URL', 'error'); return; }
+  const url = (bgInputUrl || $('bgUrl').value).trim();
+  if (!url) { toast('Upload gambar atau masukkan URL dulu', 'error'); return; }
 
   $('bgResult').style.display = 'none';
   $('bgRetry').style.display = 'none';
@@ -219,32 +248,50 @@ async function runRemoveBG() {
   $('bgBtn').disabled = true;
 
   try {
-    const r = await fetch(`${REMOVEBG_API}?url=${encodeURIComponent(url)}`);
-    if (!r.ok) throw new Error(`API error ${r.status}`);
-    const data = await r.json();
-    const resultUrl = data.result || data.url || data.output || data.image;
-    if (!resultUrl) throw new Error('No result URL returned');
+    const resultUrl = buildRemoveBGUrl(url);
+
+    $('bgLoading').querySelector('.load-sub').textContent = 'Memvalidasi gambar input...';
+    await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = resolve;
+      img.onerror = () => reject(new Error('URL gambar input tidak valid atau tidak bisa diakses.'));
+      img.src = url;
+    });
+
+    $('bgLoading').querySelector('.load-title').textContent = 'AI sedang memproses...';
+    $('bgLoading').querySelector('.load-sub').textContent = 'Menghapus background — ini bisa 5–30 detik';
+    await new Promise((resolve, reject) => {
+      const img = new Image();
+      img.onload = resolve;
+      img.onerror = () => reject(new Error('API gagal memproses gambar. Coba lagi.'));
+      img.src = resultUrl;
+    });
 
     bgResultUrl = resultUrl;
     $('bgBefore').src = url;
     $('bgAfter').src = resultUrl;
 
     $('bgLoading').style.display = 'none';
+    $('bgLoading').querySelector('.load-title').textContent = 'Removing background...';
+    $('bgLoading').querySelector('.load-sub').textContent = 'AI is analyzing your image';
     $('bgResult').style.display = 'flex';
     initBA('bgBAC', 'bgAfterMask', 'bgLine');
     saveHistory('removebg', url, resultUrl, '');
-    toast('Background removed!', 'success');
+    toast('Background berhasil dihapus!', 'success');
   } catch (err) {
     $('bgLoading').style.display = 'none';
+    $('bgLoading').querySelector('.load-title').textContent = 'Removing background...';
+    $('bgLoading').querySelector('.load-sub').textContent = 'AI is analyzing your image';
     $('bgRetry').style.display = 'flex';
-    toast('Remove BG failed: ' + err.message, 'error');
+    console.error('[MonPix RemoveBG Error]', err);
+    toast(err.message, 'error', 7000);
   }
   $('bgBtn').disabled = false;
 }
 
 $('bgBtn').addEventListener('click', runRemoveBG);
 $('bgRetry').addEventListener('click', runRemoveBG);
-$('bgCopy').addEventListener('click', () => navigator.clipboard.writeText(bgResultUrl).then(() => toast('URL copied!', 'success')).catch(() => toast('Failed to copy', 'error')));
+$('bgCopy').addEventListener('click', () => navigator.clipboard.writeText(bgResultUrl).then(() => toast('URL disalin!', 'success')).catch(() => toast('Gagal copy', 'error')));
 $('bgDown').addEventListener('click', () => downloadImg(bgResultUrl, 'monpix-nobg.png'));
 $('bgFull').addEventListener('click', () => openFullscreen(bgResultUrl));
 
@@ -253,7 +300,7 @@ function downloadImg(url, name) {
   const a = document.createElement('a');
   a.href = url; a.download = name; a.target = '_blank';
   document.body.appendChild(a); a.click(); document.body.removeChild(a);
-  toast('Download started!', 'success');
+  toast('Download dimulai!', 'success');
 }
 
 // ====== FULLSCREEN ======
@@ -279,7 +326,7 @@ function renderHistory() {
   $('histCount').textContent = hist.length + ' item' + (hist.length !== 1 ? 's' : '');
 
   if (hist.length === 0) {
-    grid.innerHTML = `<div class="hist-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><p>No history yet</p><span>Processed images will appear here</span></div>`;
+    grid.innerHTML = `<div class="hist-empty"><svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1"><path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"/><path d="M3 3v5h5"/><path d="M12 7v5l4 2"/></svg><p>Belum ada history</p><span>Gambar yang diproses akan muncul di sini</span></div>`;
     return;
   }
 
@@ -287,8 +334,8 @@ function renderHistory() {
     const cyan = item.type === 'removebg';
     const label = cyan ? 'BG Removed' : `Upscaled${item.meta ? ' ' + item.meta : ''}`;
     const d = new Date(item.date);
-    const dateStr = d.toLocaleDateString('en-US', { month: 'short', day: 'numeric', hour: '2-digit', minute: '2-digit' });
-    const safeUrl = item.resultUrl.replace(/'/g, "\\'");
+    const dateStr = d.toLocaleDateString('id-ID', { day: 'numeric', month: 'short', hour: '2-digit', minute: '2-digit' });
+    const safeUrl = item.resultUrl.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
     return `<div class="hist-card">
       <img class="hist-thumb${cyan ? ' checker' : ''}" src="${item.resultUrl}" alt="Result" loading="lazy"/>
       <div class="hist-info">
@@ -296,7 +343,7 @@ function renderHistory() {
         <div class="hist-date">${dateStr}</div>
       </div>
       <div class="hist-actions">
-        <button class="hist-btn${cyan ? ' cyan' : ''}" onclick="navigator.clipboard.writeText('${safeUrl}').then(()=>toast('Copied!','success'))">
+        <button class="hist-btn${cyan ? ' cyan' : ''}" onclick="navigator.clipboard.writeText('${safeUrl}').then(()=>toast('Disalin!','success'))">
           <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="9" y="9" width="13" height="13" rx="2"/><path d="M5 15H4a2 2 0 0 1-2-2V4a2 2 0 0 1 2-2h9a2 2 0 0 1 2 2v1"/></svg>Copy
         </button>
         <button class="hist-btn${cyan ? ' cyan' : ''}" onclick="openFullscreen('${safeUrl}')">
@@ -308,10 +355,10 @@ function renderHistory() {
 }
 
 $('clearHist').addEventListener('click', () => {
-  if (confirm('Clear all history?')) {
+  if (confirm('Hapus semua history?')) {
     localStorage.removeItem('monpix-history');
     renderHistory();
-    toast('History cleared', 'info');
+    toast('History dihapus', 'info');
   }
 });
 
