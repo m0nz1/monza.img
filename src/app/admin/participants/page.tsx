@@ -35,16 +35,20 @@ export default function AdminParticipantsPage() {
     type RawParticipant = {
       id: string;
       created_at: string;
-      users: { username: string; email: string } | null;
-      gifts: { name: string } | null;
+      users: { username: string; email: string } | { username: string; email: string }[] | null;
+      gifts: { name: string } | { name: string }[] | null;
     };
-    const rows: ParticipantRow[] = ((data || []) as RawParticipant[]).map((d) => ({
-      id: d.id,
-      created_at: d.created_at,
-      username: d.users?.username || "-",
-      email: d.users?.email || "-",
-      gift_name: d.gifts?.name || "-",
-    }));
+    const rows: ParticipantRow[] = ((data || []) as unknown as RawParticipant[]).map((d) => {
+      const u = Array.isArray(d.users) ? d.users[0] : d.users;
+      const g = Array.isArray(d.gifts) ? d.gifts[0] : d.gifts;
+      return {
+        id: d.id,
+        created_at: d.created_at,
+        username: u?.username || "-",
+        email: u?.email || "-",
+        gift_name: g?.name || "-",
+      };
+    });
     setParticipants(rows);
     setFiltered(rows);
     setLoading(false);
@@ -207,5 +211,5 @@ export default function AdminParticipantsPage() {
       )}
     </div>
   );
-  }
-      
+      }
+    
