@@ -3,7 +3,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { createClient } from "@/lib/supabase/client";
 import { Search, Trophy, RefreshCw } from "lucide-react";
-import { formatDate } from "@/lib/utils";
 
 interface ParticipantRow {
   id: string;
@@ -33,7 +32,13 @@ export default function AdminParticipantsPage() {
       .select(`id, created_at, users(username, email), gifts(name)`)
       .order("created_at", { ascending: false });
 
-    const rows: ParticipantRow[] = (data || []).map((d: any) => ({
+    type RawParticipant = {
+      id: string;
+      created_at: string;
+      users: { username: string; email: string } | null;
+      gifts: { name: string } | null;
+    };
+    const rows: ParticipantRow[] = ((data || []) as RawParticipant[]).map((d) => ({
       id: d.id,
       created_at: d.created_at,
       username: d.users?.username || "-",
@@ -202,4 +207,5 @@ export default function AdminParticipantsPage() {
       )}
     </div>
   );
-}
+  }
+      
