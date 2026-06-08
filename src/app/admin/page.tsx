@@ -94,7 +94,11 @@ export default function AdminDashboardPage() {
 
       if (activity) {
         setRecentActivity(
-          activity.map((a: any) => ({
+          (activity as Array<{
+            created_at: string;
+            users: { username: string; email: string } | null;
+            gifts: { name: string } | null;
+          }>).map((a) => ({
             username: a.users?.username || "-",
             email: a.users?.email || "-",
             gift_name: a.gifts?.name || "-",
