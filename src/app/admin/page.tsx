@@ -93,17 +93,22 @@ export default function AdminDashboardPage() {
       });
 
       if (activity) {
+        type RawActivity = {
+          created_at: string;
+          users: { username: string; email: string } | { username: string; email: string }[] | null;
+          gifts: { name: string } | { name: string }[] | null;
+        };
         setRecentActivity(
-          (activity as Array<{
-            created_at: string;
-            users: { username: string; email: string } | null;
-            gifts: { name: string } | null;
-          }>).map((a) => ({
-            username: a.users?.username || "-",
-            email: a.users?.email || "-",
-            gift_name: a.gifts?.name || "-",
-            created_at: a.created_at,
-          }))
+          (activity as unknown as RawActivity[]).map((a) => {
+            const u = Array.isArray(a.users) ? a.users[0] : a.users;
+            const g = Array.isArray(a.gifts) ? a.gifts[0] : a.gifts;
+            return {
+              username: u?.username || "-",
+              email: u?.email || "-",
+              gift_name: g?.name || "-",
+              created_at: a.created_at,
+            };
+          })
         );
       }
     } finally {
