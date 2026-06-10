@@ -118,8 +118,8 @@ export default function AdminParticipantsPage() {
       <div className="card-brutal bg-white dark:bg-zinc-900 overflow-hidden">
         {loading ? (
           <div className="p-6 space-y-3">
-            {Array.from({ length: 5 }).map((_, i) => (
-              <div key={i} className="skeleton h-12 w-full" />
+            {Array.from({ length: 5 }).map((_, idx) => (
+              <div key={idx} className="skeleton h-12 w-full" />
             ))}
           </div>
         ) : paginated.length === 0 ? (
@@ -193,7 +193,7 @@ export default function AdminParticipantsPage() {
       {/* Pagination */}
       {totalPages > 1 && (
         <div className="flex items-center gap-2 mt-4 justify-center flex-wrap">
-          {Array.from({ length: totalPages }, (_, i) => i + 1).map((p) => (
+          {Array.from({ length: totalPages }, (_, idx) => idx + 1).map((p) => (
             <button
               key={p}
               onClick={() => setPage(p)}
