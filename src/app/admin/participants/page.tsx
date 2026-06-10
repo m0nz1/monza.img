@@ -35,12 +35,12 @@ export default function AdminParticipantsPage() {
     type RawParticipant = {
       id: string;
       created_at: string;
-      users: { username: string; email: string }[] | null;
-      gifts: { name: string }[] | null;
+      users: { username: string; email: string } | { username: string; email: string }[] | null;
+      gifts: { name: string } | { name: string }[] | null;
     };
     const rows: ParticipantRow[] = ((data || []) as unknown as RawParticipant[]).map((d) => {
-      const u = d.users?.[0];
-      const g = d.gifts?.[0];
+      const u = Array.isArray(d.users) ? d.users[0] : d.users;
+      const g = Array.isArray(d.gifts) ? d.gifts[0] : d.gifts;
       return {
         id: d.id,
         created_at: d.created_at,
@@ -145,7 +145,7 @@ export default function AdminParticipantsPage() {
                 </tr>
               </thead>
               <tbody>
-                {paginated.map((p, i, i) => (
+                {paginated.map((p, i) => (
                   <tr
                     key={p.id}
                     className="border-b-2 border-zinc-100 dark:border-zinc-800 hover:bg-zinc-50 dark:hover:bg-zinc-800 transition-colors"
